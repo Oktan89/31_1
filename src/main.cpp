@@ -44,15 +44,23 @@ class shared_ptr_toy
 public:
     shared_ptr_toy(Toy* toy = nullptr) : _toy(toy)
     {
-        ++count;
+        if(_toy != nullptr)
+            ++count;
         std::cout << "Constructor chared_ptr_toy\n";
     }
     
+    shared_ptr_toy(const shared_ptr_toy& ptr)
+    {
+        _toy = ptr._toy;
+        
+    }
+
     ~shared_ptr_toy()
     {
         std::cout << "Destructor chared_ptr_toy\n";
         if(count <= 1)
         {
+            --count;
             delete _toy;
             std::cout << "destroy\n";
         }
@@ -67,7 +75,11 @@ public:
 
 int main()
 {
-    Toy* t = new Toy("test");
+  Toy* t = new Toy;
   shared_ptr_toy ptr(t);
-    
+  {
+      shared_ptr_toy ptr2(ptr);
+  }
+  std::cout<<"e"<<std::endl;
+  //  delete t;
 }
