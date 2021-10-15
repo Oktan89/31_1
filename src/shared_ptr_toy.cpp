@@ -38,30 +38,33 @@ shared_ptr_toy &shared_ptr_toy::operator=(const shared_ptr_toy &oth)
     if (this == &oth)
         return *this;
 
-    if (_toy != nullptr)
+    subtract_count(); //уменьшаем счетчик this
+    if (use_count() == 0) //если больше нет владельцев удаляем так как этот объект последний и мы его перезаписываем деструктор вызван не будет и произойдет утечка
     {
+        std::cout << "delete toy " <<_toy->get()<< std::endl;
         delete _toy;
         _toy = nullptr;
         delete _count;
         _count = nullptr;
     }
-
     _toy = oth._toy;
     _count = oth._count;
-    add_count();
+    add_count(); //увеличиваем ссылку счетчик копируемого объекта oth
     return *this;
 }
 
 shared_ptr_toy::~shared_ptr_toy()
 {
-    std::cout << "destruct ptr copy toy : "<<use_count() << std::endl;
+    std::cout << "destruct ptr copy toy "<< _toy->get() <<" : "<<use_count() << std::endl;
 
     subtract_count(); //уменьшаем счетчик при выходи из области видимости одного из объектов
     if (*_count == 0) //если больше нет владельцев удаляем
     {
+        std::cout << "delete toy " <<_toy->get()<< std::endl;
         delete _toy;
+        _toy = nullptr;
         delete _count;
-        std::cout << "delete toy" << std::endl;
+        _count = nullptr;
     }
 }
 

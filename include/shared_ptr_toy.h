@@ -31,6 +31,8 @@ public:
     shared_ptr_toy() : shared_ptr_toy(nullptr) {}
     shared_ptr_toy(const shared_ptr_toy& oth);
     shared_ptr_toy& operator= (const shared_ptr_toy& oth);
+    Toy* operator->() {return _toy;}
+    Toy& operator*() {return *_toy;}
     ~shared_ptr_toy();
 };
 
